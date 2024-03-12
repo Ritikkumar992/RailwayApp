@@ -7,14 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".Activities.TrainActivity"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="start"
     >
+
     <TextView
-        android:id="@+id/txtView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Train Activity"
-        android:textSize="36sp"
+        android:text="Train Details:"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/blue"
+        android:padding="8dp"
+        android:layout_margin="8dp"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerView"
         />
 
 </LinearLayout>

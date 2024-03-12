@@ -1,17 +1,18 @@
 //package com.example.trainapi.Model;
 //
+//import java.util.List;
 //import java.util.Map;
 //
 //public class TrainData {
-//    private String id;
-//    private Map<String, Integer> days;
-//    private String to_id;
-//    private String classes;
-//    private String from_id;
-//    private String arriveTime;
-//    private String departTime;
+//        private String id;
+//        private Map<String, Integer> days;
+//        private String to_id;
+//        private List<String> classes; // Change type to List<String>
+//        private String from_id;
+//        private String arriveTime;
+//        private String departTime;
 //
-//    public TrainData(String id, Map<String, Integer> days, String to_id, String classes, String from_id, String arriveTime, String departTime) {
+//    public TrainData(String id, Map<String, Integer> days, String to_id, List<String> classes, String from_id, String arriveTime, String departTime) {
 //        this.id = id;
 //        this.days = days;
 //        this.to_id = to_id;
@@ -20,6 +21,8 @@
 //        this.arriveTime = arriveTime;
 //        this.departTime = departTime;
 //    }
+//
+//    // Add getter and setter methods
 //
 //    public String getId() {
 //        return id;
@@ -45,11 +48,11 @@
 //        this.to_id = to_id;
 //    }
 //
-//    public String getClasses() {
+//    public List<String> getClasses() {
 //        return classes;
 //    }
 //
-//    public void setClasses(String classes) {
+//    public void setClasses(List<String> classes) {
 //        this.classes = classes;
 //    }
 //

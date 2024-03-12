@@ -3,6 +3,8 @@ package com.example.trainapi.Activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.trainapi.Adapter.TrainAdapter;
 import com.example.trainapi.EndPoints.TrainApi;
 //import com.example.trainapi.Model.TrainData;
 import com.example.trainapi.Model.TrainResponseModel;
@@ -31,17 +34,17 @@ import retrofit2.Response;
 
 public class TrainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
-    TextView textView;
+    private TrainAdapter adapter;
+    private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train);
 
         progressDialog = new ProgressDialog(TrainActivity.this);
-        progressDialog.setMessage("Loading...");
+        progressDialog.setMessage("Please Wait 🚉...");
         progressDialog.show();
 
-        textView = findViewById(R.id.txtView);
 
         Intent intent = getIntent();
         String trainNoName = intent.getStringExtra("Train_no_name");
@@ -63,21 +66,23 @@ public class TrainActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 List<TrainResponseModel> trainDataList = response.body();
                 if (response.isSuccessful()) {
-                    if (trainDataList != null) {
-                        for (TrainResponseModel trainResponseModel : trainDataList) {
-                            textView.setText(trainResponseModel.getName());
-                            Log.d("TrainData", "Train Number: " + trainResponseModel.getTrain_num());
-                            Log.d("TrainData", "Name: " + trainResponseModel.getName());
-                        }
-                    } else {
-                        Log.e("ERROR", "Empty train data list");
-                        Toast.makeText(TrainActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
-                    }
+                    generateTrainDataList(trainDataList);
+//                    if (trainDataList != null) {
+//                        for (TrainResponseModel trainResponseModel : trainDataList) {
+//
+////                            trainName.setText(trainResponseModel.getName());
+////                            trainNo.setText(String.valueOf(trainResponseModel.getTrain_num()));
+////                            trainFrom.setText(trainResponseModel.getTrain_from()+" To ");
+////                            trainTo.setText(trainResponseModel.getTrain_to());
+//                        }
+//                    } else {
+//                        Log.e("ERROR", "Empty train data list");
+//                        Toast.makeText(TrainActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
+//                    }
                 } else {
                     Log.e("ERROR", response.message());
                     Toast.makeText(TrainActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
                 }
-
             }
             @Override
             public void onFailure(Call<List<TrainResponseModel>> call, Throwable t) {
@@ -85,5 +90,11 @@ public class TrainActivity extends AppCompatActivity {
                 Toast.makeText(TrainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void generateTrainDataList(List<TrainResponseModel> trainResponseModels){
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new TrainAdapter(this, trainResponseModels);
+        recyclerView.setAdapter(adapter);
     }
 }

@@ -13,22 +13,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_margin="20dp">
+        android:layout_margin="20dp"
+        >
 
         <EditText
             android:id="@+id/train_no_name"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Train No / Train Name"
+            android:hint="🚉 Train No / Train Name"
             android:padding="10dp"
             />
     </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/btnId"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="Search Train"
-        android:backgroundTint="@color/green"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:background="@color/green"
         android:padding="10dp"
         android:layout_margin="10dp"
         />

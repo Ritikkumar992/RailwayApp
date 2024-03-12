@@ -47,7 +47,7 @@ public class TrainResponseModel {
     public void setTrain_to(String train_to) {
         this.train_to = train_to;
     }
-//
+
 //    public TrainData getData() {
 //        return data;
 //    }
