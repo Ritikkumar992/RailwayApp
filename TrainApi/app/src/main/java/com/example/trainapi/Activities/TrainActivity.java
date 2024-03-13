@@ -6,20 +6,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trainapi.Adapter.TrainAdapter;
 import com.example.trainapi.EndPoints.TrainApi;
 //import com.example.trainapi.Model.TrainData;
+import com.example.trainapi.MainActivity;
 import com.example.trainapi.Model.TrainResponseModel;
 import com.example.trainapi.Network.RetrofitClient;
 import com.example.trainapi.R;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnPaidEventListener;
+import com.google.android.gms.ads.ResponseInfo;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -36,6 +50,14 @@ public class TrainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private TrainAdapter adapter;
     private RecyclerView recyclerView;
+    private ImageView backBtn;
+    TextView watchAds;
+
+    private InterstitialAd mInterstitialAd;
+    private static final String TAG = "MainActivity";
+    private AdView trainAdView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +68,96 @@ public class TrainActivity extends AppCompatActivity {
         progressDialog.show();
 
 
+
+        //======================================BANNER ADS =========================================//
+        AdRequest adRequest = new AdRequest.Builder().build();
+        trainAdView = findViewById(R.id.trainAdView);
+        trainAdView.loadAd(adRequest);
+
+        trainAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdClicked() {
+                super.onAdClicked();
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                trainAdView.loadAd(adRequest);
+            }
+
+            @Override
+            public void onAdImpression() {
+                super.onAdImpression();
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+            }
+
+            @Override
+            public void onAdSwipeGestureClicked() {
+                super.onAdSwipeGestureClicked();
+            }
+        });
+
+
+
+        // =================================== Interstial Add ===================================== //
+        // dummy: ca-app-pub-3940256099942544/1033173712
+        // real: ca-app-pub-5407774234677570/4046793234
+
+        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        Log.i(TAG, "onAdLoaded");
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        Log.d(TAG, loadAdError.toString());
+                        mInterstitialAd = null;
+                    }
+                });
+
+        backBtn = findViewById(R.id.backBtnId);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mInterstitialAd != null) {
+                    moveToSearchTrain();
+                    mInterstitialAd.show(TrainActivity.this);
+                } else {
+                    Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                }
+//                moveToSearchTrain();
+            }
+        });
+
+
+        //================================================= REWARD Ads =============================//
+        watchAds = findViewById(R.id.watchAd);
+
+
+
+
+        // ====================================================================================//
         Intent intent = getIntent();
         String trainNoName = intent.getStringExtra("Train_no_name");
 
@@ -65,29 +177,19 @@ public class TrainActivity extends AppCompatActivity {
             public void onResponse(Call<List<TrainResponseModel>> call, Response<List<TrainResponseModel>> response) {
                 progressDialog.dismiss();
                 List<TrainResponseModel> trainDataList = response.body();
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && !trainDataList.isEmpty()) {
                     generateTrainDataList(trainDataList);
-//                    if (trainDataList != null) {
-//                        for (TrainResponseModel trainResponseModel : trainDataList) {
-//
-////                            trainName.setText(trainResponseModel.getName());
-////                            trainNo.setText(String.valueOf(trainResponseModel.getTrain_num()));
-////                            trainFrom.setText(trainResponseModel.getTrain_from()+" To ");
-////                            trainTo.setText(trainResponseModel.getTrain_to());
-//                        }
-//                    } else {
-//                        Log.e("ERROR", "Empty train data list");
-//                        Toast.makeText(TrainActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
-//                    }
                 } else {
                     Log.e("ERROR", response.message());
-                    Toast.makeText(TrainActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TrainActivity.this, "Please Enter Correct Train No / Train Name", Toast.LENGTH_SHORT).show();
+                    moveToSearchTrain();
                 }
             }
             @Override
             public void onFailure(Call<List<TrainResponseModel>> call, Throwable t) {
                 Log.e("ERROR", t.getMessage());
-                Toast.makeText(TrainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(TrainActivity.this, "Server Error :< Try Again after some time! ", Toast.LENGTH_SHORT).show();
+                moveToSearchTrain();
             }
         });
     }
@@ -96,5 +198,10 @@ public class TrainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new TrainAdapter(this, trainResponseModels);
         recyclerView.setAdapter(adapter);
+    }
+    private void moveToSearchTrain()
+    {
+        Intent intent = new Intent(TrainActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

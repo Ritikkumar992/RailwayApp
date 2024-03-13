@@ -5,15 +5,14 @@ public class TrainResponseModel {
     private String name;
     private String train_from;
     private String train_to;
-//    private TrainData data;
+    private TrainData data;
 
-
-    public TrainResponseModel(int train_num, String name, String train_from, String train_to) {
+    public TrainResponseModel(int train_num, String name, String train_from, String train_to, TrainData data) {
         this.train_num = train_num;
         this.name = name;
         this.train_from = train_from;
         this.train_to = train_to;
-//        this.data = data;
+        this.data = data;
     }
 
     public int getTrain_num() {
@@ -48,11 +47,11 @@ public class TrainResponseModel {
         this.train_to = train_to;
     }
 
-//    public TrainData getData() {
-//        return data;
-//    }
-//
-//    public void setData(TrainData data) {
-//        this.data = data;
-//    }
+    public TrainData getData() {
+        return data;
+    }
+
+    public void setData(TrainData data) {
+        this.data = data;
+    }
 }
