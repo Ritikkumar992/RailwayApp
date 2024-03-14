@@ -30,9 +30,9 @@
         android:text="Search Train"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:background="@color/green"
         android:padding="10dp"
         android:layout_margin="10dp"
+        style="@style/Widget.AppCompat.Button.Colored"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -59,7 +59,7 @@
         android:text="Find PNR Status"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:background="@color/green"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:padding="10dp"
         android:layout_margin="10dp"
         />
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId = "ca-app-pub-3940256099942544/9214589741"
+        ads:adUnitId = "ca-app-pub-5407774234677570/6353284578"
         >
     </com.google.android.gms.ads.AdView>
 
@@ -83,4 +83,6 @@
 <!--
 dummy: ca-app-pub-3940256099942544/9214589741
 real: ca-app-pub-5407774234677570/6353284578
+real-recycle: ca-app-pub-5407774234677570/1786874671
+
 -->

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TrainApi</string>
+    <string name="ad_attribution">AD</string>
 </resources>

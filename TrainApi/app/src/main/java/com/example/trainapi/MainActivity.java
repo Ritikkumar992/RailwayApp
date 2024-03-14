@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
             public void onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
                 super.onAdLoaded();
-                Toast.makeText(MainActivity.this, "Add Loaded", Toast.LENGTH_SHORT).show();
             }
 
             @Override

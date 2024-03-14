@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,8 @@ import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.gson.Gson;
 import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.rvadapter.AdmobNativeAdAdapter;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -55,7 +58,7 @@ public class TrainActivity extends AppCompatActivity {
     private TrainAdapter adapter;
     private RecyclerView recyclerView;
     private ImageView backBtn;
-    TextView watchAds;
+    Button watchAds;
 
     private InterstitialAd mInterstitialAd;
     private static final String TAG = "MainActivity";
@@ -188,9 +191,21 @@ public class TrainActivity extends AppCompatActivity {
     }
     private void generateTrainDataList(List<TrainResponseModel> trainResponseModels){
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new TrainAdapter(this, trainResponseModels);
-        recyclerView.setAdapter(adapter);
+//        recyclerView.setAdapter(adapter);
+
+        // ------------------------------------ Implementing Native Ads in Recycler View ----------------------------//
+
+
+        AdmobNativeAdAdapter admobNativeAdAdapter = AdmobNativeAdAdapter.Builder.Companion.
+                with("ca-app-pub-3940256099942544/2247696110", adapter, "small")
+        .adItemInterval(1).build();
+        recyclerView.setAdapter(admobNativeAdAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+
     }
     private void moveToSearchTrain()
     {
